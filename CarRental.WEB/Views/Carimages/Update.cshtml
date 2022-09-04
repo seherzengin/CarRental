@@ -1,0 +1,35 @@
+﻿@{
+    ViewData["Title"] = "Update";
+}
+@model CarImageDto
+<h1>Update</h1>
+<div class="row">
+    <div class="col-md-6">
+        <form asp-action="Update" method="post" asp-controller="Carimages">
+            <div class="form-group">
+                <label asp-for="Id"></label>
+                <input asp-for="Id" class="form-control"/>
+                <span asp-validation-for="Id" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CarId"></label>
+                <input asp-for="CarId"class="form-control">
+                <span asp-validation-for="CarId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ImagePath"></label>
+                <input asp-for="ImagePath" class="form-control">
+                <span asp-validation-for="ImagePath" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Date"></label>
+                <input asp-for="Date"class="form-control">
+                <span asp-validation-for="Date" class="text-danger"></span>
+            </div>
+             <div class="form-group">
+                <input type="submit" value="Update" class="btn btn-primary"/>
+            </div>
+        </form>
+    </div>
+</div>
+

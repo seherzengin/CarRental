@@ -1,0 +1,52 @@
+﻿
+@{
+    ViewData["Title"] = "Save";
+}
+
+@model CarDto
+<h1>Save Car</h1>
+<div class="row">
+    <div class="col-md-6">
+        <form asp-action="Save" method="post" asp-controller="Cars">
+            <div class="form-group">
+                <label asp-for="Plaka"></label>
+                <input asp-for="Plaka" class="form-control"/>
+                <span asp-validation-for="Plaka" class="text-danger"></span>
+            </div>
+           <div class="form-group">
+                <label asp-for="BrandId"></label>
+                <input asp-for="BrandId" class="form-control"/>
+                <span asp-validation-for="BrandId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ColorId"></label>
+                <input asp-for="ColorId" class="form-control"/>
+                <span asp-validation-for="ColorId" class="text-danger"></span>
+            </div>
+             <div class="form-group">
+                <label asp-for="ModelYear"></label>
+                <input asp-for="ModelYear" class="form-control"/>
+                <span asp-validation-for="ModelYear" class="text-danger"></span>
+            </div>
+             <div class="form-group">
+                <label asp-for="DailyPrice"></label>
+                <input asp-for="DailyPrice" class="form-control"/>
+                <span asp-validation-for="DailyPrice" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Description"></label>
+                <input asp-for="Description" class="form-control"/>
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="FindexScore"></label>
+                <input asp-for="FindexScore" class="form-control"/>
+                <span asp-validation-for="FindexScore" class="text-danger"></span>
+            </div>
+             <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary"/>
+            </div>
+        </form>
+    </div>
+</div>
+

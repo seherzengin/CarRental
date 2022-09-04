@@ -1,0 +1,45 @@
+﻿@using CarRental.Caching
+@using CarRental.Repository.Models
+@{
+    ViewData["Title"] = "Index";
+}
+@model IEnumerable<CarDto>;
+<table class="table table-striped">
+        <thead>
+            <tr>
+            <td>Id</td>
+            <td>Plaka</td>
+            <td>BrandId</td>
+            <td>ColorId</td>
+            <td>ModelYear</td>
+            <td>DailyPrice</td>
+            <td>Description</td>
+            <td>FindexScore</td>
+            </tr>
+        </thead>
+        <tbody>
+
+            @foreach (var item in Model)
+            {
+                <tr>
+               <td>@item.Id</td>
+                <td>@item.Plaka</td>
+                 <td>@item.BrandId</td>
+                  <td>@item.ColorId</td>
+                   <td>@item.ModelYear</td>
+                    <td>@item.DailyPrice</td>
+                     <td>@item.Description</td>
+                      <td>@item.FindexScore</td>
+                      <td>
+                        <a class="btn btn-warning" asp-controller="Cars" asp-action="Update" asp-route-id="@item.Id">Update</a>
+                          <a class="btn btn-danger" asp-controller="Cars" asp-action="Remove" asp-route-id="@item.Id">Delete</a>
+                        </td>
+                 </tr>
+            }
+
+        </tbody>
+
+
+
+    </table>
+
