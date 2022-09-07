@@ -12,7 +12,5 @@ namespace CarRental.Core.Services
     {
         Task<CustomResponseDto<List<CarWithCarImageDto>>> GetCarWithCarImage();
 
-        Task<CustomResponseDto<CarDto>> GetCarByIdAsync(int Id);
-
     }
 }

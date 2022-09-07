@@ -6,7 +6,6 @@ namespace CarRental.Core.Repositories
     public interface ICarRepository : IGenericRepository<Car>
     {
         Task<List<Car>> GetCarWithCarImage();
-        Task<Car> GetCarByIdAsync(int Id);
 
     }
 }

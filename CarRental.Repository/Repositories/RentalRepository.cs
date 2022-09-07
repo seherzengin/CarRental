@@ -19,5 +19,14 @@ namespace CarRental.Repository.Repositories
         {
             return await _context.Rentals.Include(x => x.Customer).Where(x => x.Id == rentalId).FirstOrDefaultAsync();
         }
+
+        public async Task<Rental> GetByIdAsync(int id )
+        {
+            return await _context.Rentals
+                                 .Include(r => r.Customer)
+                                 .Include(r => r.Cars)
+                                 .FirstOrDefaultAsync(m =>m.Id==id);
+        }
+
     }
 }

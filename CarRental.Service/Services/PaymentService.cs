@@ -22,6 +22,14 @@ namespace CarRental.Service.Services
             _mapper = mapper;
         }
 
+        public async Task<CustomResponseDto<PaymentDto>> GetByIdAsync(int Id)
+        {
+            var payment = await _paymentRepository.GetByIdAsync(Id);
+
+            var paymentDto = _mapper.Map<PaymentDto>(payment);
+            return CustomResponseDto<PaymentDto>.Success(200, paymentDto);
+        }
+
         public async Task<CustomResponseDto<PaymentWithCustomerDto>> GetPaymentByIdWithCustomerAsync(int paymentId)
         {
             var payment = await _paymentRepository.GetPaymentByIdWithCustomerAsync(paymentId);

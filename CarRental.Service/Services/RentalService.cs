@@ -4,11 +4,6 @@ using CarRental.Core.Repositories;
 using CarRental.Core.Services;
 using CarRental.Core.UnitOfWorks;
 using CarRental.Repository.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CarRental.Service.Services
 {
@@ -20,6 +15,14 @@ namespace CarRental.Service.Services
         {
             _rentalRepository = rentalRepository;
             _mapper = mapper;
+        }
+
+        public async Task<CustomResponseDto<RentalDto>> GetByIdAsync(int Id)
+        {
+            var rental = await _rentalRepository.GetByIdAsync(Id);
+
+            var rentalDto = _mapper.Map<RentalDto>(rental);
+            return CustomResponseDto<RentalDto>.Success(200, rentalDto);
         }
 
         public async Task<CustomResponseDto<RentalWithCustomerDto>> GetRentalByIdWithCustomerAsync(int rentalId)

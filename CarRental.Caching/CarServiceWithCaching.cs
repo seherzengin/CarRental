@@ -57,16 +57,8 @@ namespace CarRental.Caching
             return Task.FromResult(_memoryCache.Get<IEnumerable<Car>>(CacheCarKey));
         }
 
-        public  Task<CustomResponseDto<CarDto>> GetCarByIdAsync(int Id)
-        {
-            var cars = _memoryCache.Get<IEnumerable<Car>>(CacheCarKey);
-
-            var carsDto = _mapper.Map<List<CarDto>>(cars);
-
-            return Task.FromResult(_memoryCache.Get<CustomResponseDto<CarDto>>(CacheCarKey) );
-        }
-
         
+
 
         public Task<CustomResponseDto<List<CarWithCarImageDto>>> GetCarWithCarImage()
         {
@@ -105,9 +97,11 @@ namespace CarRental.Caching
 
         }
 
-        public Task<Car> GetByIdAsync(int id)
+        public  Task<Car> GetByIdAsync(int id)
         {
-            throw new NotImplementedException();
+            var car = _memoryCache.Get<List<Car>>(CacheCarKey).FirstOrDefault(x => x.Id == id);
+
+            return Task.FromResult(car);
         }
     }
 }

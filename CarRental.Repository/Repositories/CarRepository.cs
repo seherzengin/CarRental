@@ -13,12 +13,11 @@ namespace CarRental.Repository.Repositories
             
         }
 
-        public async Task<Car> GetCarByIdAsync(int Id)
+        public async Task<Car> GetByIdAsync()
         {
             return await _context.Cars
-                                 .Include(x => x.BrandId)
-                                 .Include(x => x.ColorId)
-                                 .Where(x => x.Id == Id)
+                                 .Include(c => c.Brand)
+                                 .Include(c => c.Color)
                                  .FirstOrDefaultAsync();
         }
 

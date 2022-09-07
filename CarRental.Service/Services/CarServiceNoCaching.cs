@@ -17,9 +17,9 @@ namespace CarRental.Service.Services
             _mapper = mapper;
         }
 
-        public async Task<CustomResponseDto<CarDto>> GetCarByIdAsync(int Id)
+        public async Task<CustomResponseDto<CarDto>> GetByIdAsync(int Id)
         {
-            var car = await _carRepository.GetCarByIdAsync(Id);
+            var car = await _carRepository.GetByIdAsync(Id);
 
             var carDto = _mapper.Map<CarDto>(car);
             return CustomResponseDto<CarDto>.Success(200, carDto);

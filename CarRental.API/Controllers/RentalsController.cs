@@ -29,10 +29,19 @@ namespace CarRental.API.Controllers
 
         }
 
-        [HttpGet("[action]/{rentalId}")]
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetById(int id)
+        {
+            var rental = await _rentalService.GetByIdAsync(id);
+            var rentalDto = _mapper.Map<RentalDto>(rental);
+            return CreateActionResult(CustomResponseDto<RentalDto>.Success(200, rentalDto));
+        }
+
+        [HttpGet("[action]")]
         public async Task<IActionResult> GetRentalByIdWithCustomer(int rentalId)
         {
             return CreateActionResult(await _rentalService.GetRentalByIdWithCustomerAsync(rentalId));
         }
+
     }
 }

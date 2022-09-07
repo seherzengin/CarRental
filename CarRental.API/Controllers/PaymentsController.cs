@@ -28,7 +28,15 @@ namespace CarRental.API.Controllers
 
         }
 
-        [HttpGet("[action]/{paymentId}")]
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetById(int id)
+        {
+            var payment = await _paymentService.GetByIdAsync(id);
+            var paymentDto = _mapper.Map<PaymentDto>(payment);
+            return CreateActionResult(CustomResponseDto<PaymentDto>.Success(200, paymentDto));
+        }
+
+        [HttpGet("[action]")]
         public async Task<IActionResult> GetPaymentByIdWithCustomer(int paymentId)
         {
             return CreateActionResult(await _paymentService.GetPaymentByIdWithCustomerAsync(paymentId));
