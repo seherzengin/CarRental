@@ -23,16 +23,6 @@ namespace CarRental.Service.Mapping
             CreateMap<Car, CarWithCarImageDto > ();
             CreateMap<Carimage, CarImageWithCarsDto>();
 
-            //CreateMap<Car, CarWithBrandDto>();
-            //CreateMap<Brand, BrandWithCarsDto>();
-
-            //CreateMap<Car, CarWithColorDto>();
-            //CreateMap<Color, ColorWithCarsDto>();
-
-            //CreateMap<Car, CarInformationDto>();
-            //CreateMap<Brand, CarInformationDto>();
-            //CreateMap<Color, CarInformationDto>();
-
             CreateMap<User, UserWithCustomerDto>();
             CreateMap<Customer, CustomerWithUserDto>();
 

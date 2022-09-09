@@ -22,6 +22,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\CarRental.Caching\CarRental.Caching.csproj" />
+    <ProjectReference Include="..\CarRental.Service\CarRental.Service.csproj" />
   </ItemGroup>
 
 </Project>

@@ -8,6 +8,6 @@ namespace CarRental.Core.DTOs
 {
     public class CarImageWithCarsDto:CarImageDto
     {
-        public List<CarDto> Cars { get; set; }
+        public List<CarDto> Car { get; set; }
     }
 }
