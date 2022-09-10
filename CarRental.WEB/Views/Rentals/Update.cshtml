@@ -1,0 +1,44 @@
+﻿
+@{
+    ViewData["Title"] = "Update";
+}
+
+@model RentalDto 
+<h1>Update Car</h1>
+<div class="row">
+    <div class="col-md-6">
+        <form asp-action="Update" method="post" asp-controller="Rentals">
+            @*<input type="hidden" asp-for="Id"/>*@
+            <div class="form-group">
+                <label asp-for="Id"></label>
+                <input asp-for="Id" class="form-control"/>
+                <span asp-validation-for="Id" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CustomerId"></label>
+                <input asp-for="CustomerId"  class="form-control"/>
+                <span asp-validation-for="CustomerId" class="text-danger"></span>
+            </div>
+           <div class="form-group">
+                <label asp-for="CarsId"></label>
+                <input asp-for="CarsId"  class="form-control"/>
+                <span asp-validation-for="CarsId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="RentDate"></label>
+                <input asp-for="RentDate" class="form-control"/>
+                <span asp-validation-for="RentDate" class="text-danger"></span>
+            </div>
+             <div class="form-group">
+                <label asp-for="RetumDate"></label>
+                <input asp-for="RetumDate" class="form-control"/>
+                <span asp-validation-for="RetumDate" class="text-danger"></span>
+            </div>
+             <div class="form-group">
+                <input type="submit" value="Update" class="btn btn-primary"/>
+            </div>
+        </form>
+    </div>
+</div>
+
+

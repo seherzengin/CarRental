@@ -1,0 +1,43 @@
+﻿
+@{
+    ViewData["Title"] = "Save";
+}
+
+@model CreditcardDto
+<h1>Save Car</h1>
+<div class="row">
+    <div class="col-md-6">
+        <form asp-action="Save" method="post" asp-controller="Creditcards">
+            <div class="form-group">
+                <label asp-for="UsersId"></label>
+                <input asp-for="UsersId" class="form-control"/>
+                <span asp-validation-for="UsersId" class="text-danger"></span>
+            </div>
+           <div class="form-group">
+                <label asp-for="CardName"></label>
+                <input asp-for="CardName" class="form-control"/>
+                <span asp-validation-for="CardName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CardNumber"></label>
+                <input asp-for="CardNumber" class="form-control"/>
+                <span asp-validation-for="CardNumber" class="text-danger"></span>
+            </div>
+             <div class="form-group">
+                <label asp-for="CardCvc"></label>
+                <input asp-for="CardCvc" class="form-control"/>
+                <span asp-validation-for="CardCvc" class="text-danger"></span>
+            </div>
+             <div class="form-group">
+                <label asp-for="CardExpiration"></label>
+                <input asp-for="CardExpiration" class="form-control"/>
+                <span asp-validation-for="CardExpiration" class="text-danger"></span>
+            </div>
+             <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary"/>
+            </div>
+        </form>
+    </div>
+</div>
+
+

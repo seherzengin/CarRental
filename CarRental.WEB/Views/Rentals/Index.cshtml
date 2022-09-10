@@ -1,53 +1,38 @@
-﻿@model IEnumerable<CarRental.Repository.Models.Rental>
-
+﻿@using CarRental.Caching
+@using CarRental.Repository.Models
 @{
     ViewData["Title"] = "Index";
 }
+@model IEnumerable<RentalDto>;
+<table class="table table-striped">
+        <thead>
+            <tr>
+            <td>Id</td>
+            <td>CustomerId</td>
+            <td>CarsId</td>
+            <td>RentDate</td>
+            <td>RetumDate</td>
+            </tr>
+        </thead>
+        <tbody>
 
-<h1>Index</h1>
+            @foreach (var item in Model)
+            {
+                <tr>
+               <td>@item.Id</td>
+                <td>@item.CustomerId</td>
+                 <td>@item.CarsId</td>
+                  <td>@item.RentDate</td>
+                   <td>@item.RetumDate</td>
+                      <td>
+                        <a class="btn btn-warning" asp-controller="Rentals" asp-action="Update" asp-route-id="@item.Id">Update</a>
+                          <a class="btn btn-danger" asp-controller="Rentals" asp-action="Remove" asp-route-id="@item.Id">Delete</a>
+                        </td>
+                 </tr>
+            }
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.RentDate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.RetumDate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Cars)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Customer)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.RentDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.RetumDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Cars.Description)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Customer.CompanyName)
-            </td>
-            <td>
-                @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+        </tbody>
+
+
+
+    </table>
