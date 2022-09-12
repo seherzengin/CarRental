@@ -11,12 +11,7 @@ namespace CarRental.WEB.Services
             _httpClient = httpClient;
         }
 
-        /*public async Task<CustomerWithUserDto> GetSingleCustomerByIdWithUserAsync()
-        {
-            var response = await _httpClient.GetFromJsonAsync<CustomResponseDto<CustomerWithUserDto>>("customers/GetSingleCustomerByIdWithUser");
-
-            return response.Data;
-        }*/
+        
 
         public async Task<List<CustomerDto>> GetAllAsync()
         {

@@ -4,11 +4,6 @@ using CarRental.Core.Repositories;
 using CarRental.Core.Services;
 using CarRental.Core.UnitOfWorks;
 using CarRental.Repository.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CarRental.Service.Services
 {

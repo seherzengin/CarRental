@@ -16,12 +16,7 @@ namespace CarRental.WEB.Controllers
             _userApiService = userApiService;
         }
 
-        /*public async Task<IActionResult> Index()
-        {
-
-            return View(await _customerApiService.GetSingleCustomerByIdWithUserAsync());
-        }
-        */
+        
 
         public async Task<IActionResult> Index()
         {
