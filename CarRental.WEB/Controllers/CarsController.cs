@@ -1,15 +1,68 @@
-﻿using AutoMapper;
-using CarRental.Core.DTOs;
-using CarRental.Core.Services;
-using CarRental.Repository.Models;
+﻿using CarRental.Core.DTOs;
+using CarRental.WEB.Services;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace CarRental.WEB.Controllers
 {
     public class CarsController : Controller
     {
-        private readonly ICarService _services;
+
+        private readonly CarApiService _carApiService;
+
+        public CarsController(CarApiService carApiService)
+        {
+            _carApiService = carApiService;
+        }
+
+        public async Task<IActionResult> Index()
+        {
+
+            return View(await _carApiService.GetAllAsync());
+        }
+
+        public async Task<IActionResult> Save()
+        {
+
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Save(CarDto carDto)
+        {
+            if (ModelState.IsValid)
+            {
+                await _carApiService.SaveAsync(carDto);
+                return RedirectToAction(nameof(Index));
+            }
+            return View();
+        }
+
+        public async Task<IActionResult> Update(int id)
+        {
+            
+            var address = await _carApiService.GetByIdAsync(id);
+            return View(address);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Update(CarDto carDto)
+        {
+            if (ModelState.IsValid)
+            {
+                await _carApiService.UpdateAsync(carDto);
+                return RedirectToAction(nameof(Index));
+            }
+            return View(carDto);
+            
+        }
+
+        public async Task<IActionResult> Remove(int id)
+        {
+            await _carApiService.RemoveAsync(id);
+            return RedirectToAction(nameof(Index));
+        }
+
+        /*private readonly ICarService _services;
         private readonly IMapper _mapper;
 
         public CarsController(ICarService services,IMapper mapper)
@@ -78,6 +131,6 @@ namespace CarRental.WEB.Controllers
             var car = await _services.GetByIdAsync(id);
             await _services.RemoveAsync(car);
             return RedirectToAction(nameof(Index));
-        }
+        }*/
     }
 }

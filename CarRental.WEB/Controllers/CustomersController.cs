@@ -1,7 +1,5 @@
-﻿using AutoMapper;
-using CarRental.Core.DTOs;
-using CarRental.Core.Services;
-using CarRental.Repository.Models;
+﻿using CarRental.Core.DTOs;
+using CarRental.WEB.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
@@ -9,28 +7,33 @@ namespace CarRental.WEB.Controllers
 {
     public class CustomersController : Controller
     {
-        private readonly ICustomerService _service;
-        private readonly IUserService _userService;
-        private readonly IMapper _mapper;
+        private readonly CustomerApiService _customerApiService;
+        private readonly UserApiService _userApiService;
 
-        public CustomersController(ICustomerService service, IMapper mapper, IUserService userService)
+        public CustomersController(CustomerApiService customerApiService, UserApiService userApiService)
         {
-            _service = service;
-            _mapper = mapper;
-            _userService = userService;
+            _customerApiService = customerApiService;
+            _userApiService = userApiService;
         }
+
+        /*public async Task<IActionResult> Index()
+        {
+
+            return View(await _customerApiService.GetSingleCustomerByIdWithUserAsync());
+        }
+        */
 
         public async Task<IActionResult> Index()
         {
-            var response = await _service.GetAllAsync();
-            return View(_mapper.Map<List<CustomerDto>>(response));
+
+            return View(await _customerApiService.GetAllAsync());
         }
+
+
 
         public async Task<IActionResult> Save()
         {
-            var users = await _userService.GetAllAsync();
-            var userDto = _mapper.Map<List<UserDto>>(users.ToList());
-            ViewBag.users = new SelectList(userDto, "Id");
+
             return View();
         }
 
@@ -39,27 +42,17 @@ namespace CarRental.WEB.Controllers
         {
             if (ModelState.IsValid)
             {
-                await _service.AddAsync(_mapper.Map<Customer>(customerDto));
+                await _customerApiService.SaveAsync(customerDto);
                 return RedirectToAction(nameof(Index));
             }
-            var users = await _userService.GetAllAsync();
-            var userDto = _mapper.Map<List<UserDto>>(users.ToList());
-            ViewBag.users = new SelectList(userDto, "Id");
             return View();
         }
 
         public async Task<IActionResult> Update(int id)
         {
-            var customer = await _service.GetByIdAsync(id);
 
-
-            var customers = await _service.GetAllAsync();
-
-            var customersDto = _mapper.Map<List<CustomerDto>>(customers.ToList());
-
-            ViewBag.customers = new SelectList(customersDto, "Id", "FirstName", customer);
-
-            return View(_mapper.Map<CustomerDto>(customer));
+            var address = await _customerApiService.GetByIdAsync(id);
+            return View(address);
         }
 
         [HttpPost]
@@ -67,23 +60,16 @@ namespace CarRental.WEB.Controllers
         {
             if (ModelState.IsValid)
             {
-                await _service.UpdateAsync(_mapper.Map<Customer>(customerDto));
+                await _customerApiService.UpdateAsync(customerDto);
                 return RedirectToAction(nameof(Index));
             }
-
-            var customers = await _service.GetAllAsync();
-
-            var customersDto = _mapper.Map<List<CustomerDto>>(customers.ToList());
-
-            ViewBag.customers = new SelectList(customersDto, "Id", "FirstName", customerDto);
-
             return View(customerDto);
+
         }
 
         public async Task<IActionResult> Remove(int id)
         {
-            var customer = await _service.GetByIdAsync(id);
-            await _service.RemoveAsync(customer);
+            await _customerApiService.RemoveAsync(id);
             return RedirectToAction(nameof(Index));
         }
     }

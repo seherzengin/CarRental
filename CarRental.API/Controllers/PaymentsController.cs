@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using CarRental.Core.DTOs;
 using CarRental.Core.Services;
+using CarRental.Repository.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CarRental.API.Controllers
@@ -34,6 +35,32 @@ namespace CarRental.API.Controllers
             var payment = await _paymentService.GetByIdAsync(id);
             var paymentDto = _mapper.Map<PaymentDto>(payment);
             return CreateActionResult(CustomResponseDto<PaymentDto>.Success(200, paymentDto));
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Save(PaymentDto paymentDto)
+        {
+            var payment = await _paymentService.AddAsync(_mapper.Map<Payment>(paymentDto));
+            var paymentsDto = _mapper.Map<PaymentDto>(payment);
+            return CreateActionResult(CustomResponseDto<PaymentDto>.Success(201, paymentsDto));
+        }
+
+        [HttpPut]
+        public async Task<IActionResult> Update(PaymentDto paymentDto)
+        {
+            await _paymentService.UpdateAsync(_mapper.Map<Payment>(paymentDto));
+
+            return CreateActionResult(CustomResponseDto<NoContentDto>.Success(204));
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Remove(int id)
+        {
+            var payment = await _paymentService.GetByIdAsync(id);
+
+            await _paymentService.RemoveAsync(payment);
+
+            return CreateActionResult(CustomResponseDto<NoContentDto>.Success(204));
         }
 
         [HttpGet("[action]")]

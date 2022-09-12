@@ -2,6 +2,7 @@
 using CarRental.Core.DTOs;
 using CarRental.Core.Services;
 using CarRental.Repository.Models;
+using CarRental.WEB.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
@@ -9,7 +10,19 @@ namespace CarRental.WEB.Controllers
 {
     public class ColorsController : Controller
     {
-        private readonly IColorService _service;
+        private readonly ColorApiService _colorApiService;
+
+        public ColorsController(ColorApiService colorApiService)
+        {
+            _colorApiService = colorApiService;
+        }
+
+        public async Task<IActionResult> Index()
+        {
+
+            return View(await _colorApiService.GetAllAsync());
+        }
+        /*private readonly IColorService _service;
         private readonly IMapper _mapper;
 
         public ColorsController(IColorService service, IMapper mapper)
@@ -77,6 +90,6 @@ namespace CarRental.WEB.Controllers
             var color = await _service.GetByIdAsync(id);
             await _service.RemoveAsync(color);
             return RedirectToAction(nameof(Index));
-        }
+        }*/
     }
 }

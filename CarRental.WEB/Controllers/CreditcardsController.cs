@@ -1,7 +1,5 @@
-﻿using AutoMapper;
-using CarRental.Core.DTOs;
-using CarRental.Core.Services;
-using CarRental.Repository.Models;
+﻿using CarRental.Core.DTOs;
+using CarRental.WEB.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
@@ -9,73 +7,73 @@ namespace CarRental.WEB.Controllers
 {
     public class CreditcardsController : Controller
     {
-        private readonly ICreditcardService _service;
-        private readonly IMapper _mapper;
+        private readonly CreditcardApiService _creditcardApiService;
+        private readonly UserApiService _userApiService;
 
-        public CreditcardsController(ICreditcardService service, IMapper mapper)
+        public CreditcardsController(CreditcardApiService creditcardApiService, UserApiService userApiService)
         {
-            _service = service;
-            _mapper = mapper;
+            _creditcardApiService = creditcardApiService;
+            _userApiService = userApiService;
         }
 
         public async Task<IActionResult> Index()
         {
-            var response = await _service.GetAllAsync();
-            return View(_mapper.Map<List<CreditcardDto>>(response));
+
+            return View(await _creditcardApiService.GetAllAsync());
         }
 
-        public IActionResult Save()
+        public async Task<IActionResult> Save()
         {
+            var usersDto = await _userApiService.GetAllAsync();
+
+            ViewBag.users = new SelectList(usersDto, "Id", "FirstName");
+
             return View();
         }
 
         [HttpPost]
-        public async Task<IActionResult> Save(CreditcardDto creditCardDto)
+        public async Task<IActionResult> Save(CreditcardDto creditcardDto)
+
         {
+
+
             if (ModelState.IsValid)
             {
-                await _service.AddAsync(_mapper.Map<Creditcard>(creditCardDto));
+
+                await _creditcardApiService.SaveAsync(creditcardDto);
+
+
                 return RedirectToAction(nameof(Index));
             }
+
+            var usersDto = await _userApiService.GetAllAsync();
+
+            ViewBag.users = new SelectList(usersDto, "Id", "FirstName");
             return View();
         }
 
         public async Task<IActionResult> Update(int id)
         {
-            var creditCard = await _service.GetByIdAsync(id);
 
-
-            var creditCards = await _service.GetAllAsync();
-
-            var creditCardsDto = _mapper.Map<List<CreditcardDto>>(creditCards.ToList());
-
-            ViewBag.cars = new SelectList(creditCardsDto, "Id", "CardName", creditCard);
-
-            return View(_mapper.Map<CreditcardDto>(creditCard));
+            var address = await _creditcardApiService.GetByIdAsync(id);
+            return View(address);
         }
 
         [HttpPost]
-        public async Task<IActionResult> Update(CreditcardDto creditCardDto)
+        public async Task<IActionResult> Update(CreditcardDto creditcardDto)
         {
             if (ModelState.IsValid)
             {
-                await _service.UpdateAsync(_mapper.Map<Creditcard>(creditCardDto));
+                await _creditcardApiService.UpdateAsync(creditcardDto);
                 return RedirectToAction(nameof(Index));
             }
+            return View(creditcardDto);
 
-            var creditCards = await _service.GetAllAsync();
-
-            var creditCardsDto = _mapper.Map<List<CreditcardDto>>(creditCards.ToList());
-
-            ViewBag.creditCards = new SelectList(creditCardsDto, "Id", "CardName", creditCardDto);
-
-            return View(creditCardDto);
         }
 
         public async Task<IActionResult> Remove(int id)
         {
-            var creditCard = await _service.GetByIdAsync(id);
-            await _service.RemoveAsync(creditCard);
+            await _creditcardApiService.RemoveAsync(id);
             return RedirectToAction(nameof(Index));
         }
     }

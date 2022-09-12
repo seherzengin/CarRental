@@ -1,27 +1,22 @@
-﻿using AutoMapper;
-using CarRental.Core.DTOs;
-using CarRental.Core.Services;
-using CarRental.Repository.Models;
+﻿using CarRental.Core.DTOs;
+using CarRental.WEB.Services;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace CarRental.WEB.Controllers
 {
     public class FindeksController : Controller
     {
-        private readonly IFindekService _service;
-        private readonly IMapper _mapper;
+        private readonly FindekApiService _findekApiService;
 
-        public FindeksController(IFindekService service, IMapper mapper)
+        public FindeksController(FindekApiService findekApiService)
         {
-            _service = service;
-            _mapper = mapper;
+            _findekApiService = findekApiService;
         }
 
         public async Task<IActionResult> Index()
         {
-            var response = await _service.GetAllAsync();
-            return View(_mapper.Map<List<FindekDto>>(response));
+
+            return View(await _findekApiService.GetAllAsync());
         }
 
         public IActionResult Save()
@@ -34,7 +29,7 @@ namespace CarRental.WEB.Controllers
         {
             if (ModelState.IsValid)
             {
-                await _service.AddAsync(_mapper.Map<Findek>(findekDto));
+                await _findekApiService.SaveAsync(findekDto);
                 return RedirectToAction(nameof(Index));
             }
             return View();
@@ -42,16 +37,9 @@ namespace CarRental.WEB.Controllers
 
         public async Task<IActionResult> Update(int id)
         {
-            var findek = await _service.GetByIdAsync(id);
 
-
-            var findeks = await _service.GetAllAsync();
-
-            var findeksDto = _mapper.Map<List<FindekDto>>(findeks.ToList());
-
-            ViewBag.findeks = new SelectList(findeksDto, "Id", "Score", findek);
-
-            return View(_mapper.Map<FindekDto>(findek));
+            var address = await _findekApiService.GetByIdAsync(id);
+            return View(address);
         }
 
         [HttpPost]
@@ -59,23 +47,16 @@ namespace CarRental.WEB.Controllers
         {
             if (ModelState.IsValid)
             {
-                await _service.UpdateAsync(_mapper.Map<Findek>(findekDto));
+                await _findekApiService.UpdateAsync(findekDto);
                 return RedirectToAction(nameof(Index));
             }
-
-            var findeks = await _service.GetAllAsync();
-
-            var findeksDto = _mapper.Map<List<FindekDto>>(findeks.ToList());
-
-            ViewBag.findeks = new SelectList(findeksDto, "Id", "Score", findekDto);
-
             return View(findekDto);
+
         }
 
         public async Task<IActionResult> Remove(int id)
         {
-            var findek = await _service.GetByIdAsync(id);
-            await _service.RemoveAsync(findek);
+            await _findekApiService.RemoveAsync(id);
             return RedirectToAction(nameof(Index));
         }
     }

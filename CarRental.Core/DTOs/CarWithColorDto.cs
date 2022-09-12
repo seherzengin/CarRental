@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace CarRental.Core.DTOs
 {
-    public class CarImageWithCarsDto:CarImageDto
+    public class CarWithColorDto: CarDto
     {
-        public List<CarDto> Cars { get; set; }
+        public ColorDto Color { get; set; }
     }
 }

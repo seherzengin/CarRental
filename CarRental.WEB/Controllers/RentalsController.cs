@@ -1,32 +1,27 @@
-﻿using AutoMapper;
-using CarRental.Core.DTOs;
-using CarRental.Core.Services;
-using CarRental.Repository.Models;
+﻿using CarRental.Core.DTOs;
+using CarRental.WEB.Services;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace CarRental.WEB.Controllers
 {
     public class RentalsController : Controller
     {
-        private readonly IRentalService _service;
-        private readonly IMapper _mapper;
+        private readonly RentalApiService _rentalApiService;
 
-        public RentalsController(IRentalService service, IMapper mapper)
+        public RentalsController(RentalApiService rentalApiService)
         {
-            _service = service;
-            _mapper = mapper;
+            _rentalApiService = rentalApiService;
         }
 
-        
         public async Task<IActionResult> Index()
         {
-            var response = await _service.GetAllAsync();
-            return View(_mapper.Map<List<RentalDto>>(response));
+
+            return View(await _rentalApiService.GetAllAsync());
         }
 
-        public IActionResult Save()
+        public async Task<IActionResult> Save()
         {
+
             return View();
         }
 
@@ -35,7 +30,7 @@ namespace CarRental.WEB.Controllers
         {
             if (ModelState.IsValid)
             {
-                await _service.AddAsync(_mapper.Map<Rental>(rentalDto));
+                await _rentalApiService.SaveAsync(rentalDto);
                 return RedirectToAction(nameof(Index));
             }
             return View();
@@ -43,16 +38,9 @@ namespace CarRental.WEB.Controllers
 
         public async Task<IActionResult> Update(int id)
         {
-            var rental = await _service.GetByIdAsync(id);
 
-
-            var rentals = await _service.GetAllAsync();
-
-            var rentalsDto = _mapper.Map<List<RentalDto>>(rentals.ToList());
-
-            ViewBag.rentals = new SelectList(rentalsDto, "Id", "RentDate", rental);
-
-            return View(_mapper.Map<RentalDto>(rental));
+            var address = await _rentalApiService.GetByIdAsync(id);
+            return View(address);
         }
 
         [HttpPost]
@@ -60,23 +48,16 @@ namespace CarRental.WEB.Controllers
         {
             if (ModelState.IsValid)
             {
-                await _service.UpdateAsync(_mapper.Map<Rental>(rentalDto));
+                await _rentalApiService.UpdateAsync(rentalDto);
                 return RedirectToAction(nameof(Index));
             }
-
-            var rentals = await _service.GetAllAsync();
-
-            var rentalsDto = _mapper.Map<List<RentalDto>>(rentals.ToList());
-
-            ViewBag.rentals = new SelectList(rentalsDto, "Id", "RentDate", rentalDto);
-
             return View(rentalDto);
+
         }
 
         public async Task<IActionResult> Remove(int id)
         {
-            var rental = await _service.GetByIdAsync(id);
-            await _service.RemoveAsync(rental);
+            await _rentalApiService.RemoveAsync(id);
             return RedirectToAction(nameof(Index));
         }
     }

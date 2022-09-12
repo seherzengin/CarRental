@@ -1,10 +1,9 @@
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
-using CarRental.Caching;
-using CarRental.Core.Services;
 using CarRental.Repository;
 using CarRental.Service.Mapping;
 using CarRental.WEB.Modules;
+using CarRental.WEB.Services;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -20,6 +19,77 @@ var connectionString = builder.Configuration.GetConnectionString("DefaultConnect
 builder.Services.AddDbContext<carrentaldbContext>(options =>
 {
     options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
+});
+
+
+builder.Services.AddHttpClient<BrandApiService>(opt =>
+{
+
+    opt.BaseAddress = new Uri(builder.Configuration["BaseUrl"]);
+
+});
+
+builder.Services.AddHttpClient<ColorApiService>(opt =>
+{
+
+    opt.BaseAddress = new Uri(builder.Configuration["BaseUrl"]);
+
+});
+
+builder.Services.AddHttpClient<CarimageApiService>(opt =>
+{
+
+    opt.BaseAddress = new Uri(builder.Configuration["BaseUrl"]);
+
+});
+
+builder.Services.AddHttpClient<CarApiService>(opt =>
+{
+
+    opt.BaseAddress = new Uri(builder.Configuration["BaseUrl"]);
+
+});
+
+builder.Services.AddHttpClient<UserApiService>(opt =>
+{
+
+    opt.BaseAddress = new Uri(builder.Configuration["BaseUrl"]);
+
+});
+
+builder.Services.AddHttpClient<CustomerApiService>(opt =>
+{
+
+    opt.BaseAddress = new Uri(builder.Configuration["BaseUrl"]);
+
+});
+
+builder.Services.AddHttpClient<RentalApiService>(opt =>
+{
+
+    opt.BaseAddress = new Uri(builder.Configuration["BaseUrl"]);
+
+});
+
+builder.Services.AddHttpClient<PaymentApiService>(opt =>
+{
+
+    opt.BaseAddress = new Uri(builder.Configuration["BaseUrl"]);
+
+});
+
+builder.Services.AddHttpClient<CreditcardApiService>(opt =>
+{
+
+    opt.BaseAddress = new Uri(builder.Configuration["BaseUrl"]);
+
+});
+
+builder.Services.AddHttpClient<FindekApiService>(opt =>
+{
+
+    opt.BaseAddress = new Uri(builder.Configuration["BaseUrl"]);
+
 });
 
 

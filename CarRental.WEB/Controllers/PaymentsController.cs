@@ -2,6 +2,7 @@
 using CarRental.Core.DTOs;
 using CarRental.Core.Services;
 using CarRental.Repository.Models;
+using CarRental.WEB.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
@@ -9,19 +10,17 @@ namespace CarRental.WEB.Controllers
 {
     public class PaymentsController : Controller
     {
-        private readonly IPaymentService _service;
-        private readonly IMapper _mapper;
+        private readonly PaymentApiService _paymentApiService;
 
-        public PaymentsController(IPaymentService service, IMapper mapper)
+        public PaymentsController(PaymentApiService paymentApiService)
         {
-            _service = service;
-            _mapper = mapper;
+            _paymentApiService = paymentApiService;
         }
 
         public async Task<IActionResult> Index()
         {
-            var response = await _service.GetAllAsync();
-            return View(_mapper.Map<List<PaymentDto>>(response));
+
+            return View(await _paymentApiService.GetAllAsync());
         }
 
         public IActionResult Save()
@@ -34,7 +33,7 @@ namespace CarRental.WEB.Controllers
         {
             if (ModelState.IsValid)
             {
-                await _service.AddAsync(_mapper.Map<Payment>(paymentDto));
+                await _paymentApiService.SaveAsync(paymentDto);
                 return RedirectToAction(nameof(Index));
             }
             return View();
@@ -42,16 +41,9 @@ namespace CarRental.WEB.Controllers
 
         public async Task<IActionResult> Update(int id)
         {
-            var payment = await _service.GetByIdAsync(id);
 
-
-            var payments = await _service.GetAllAsync();
-
-            var paymentsDto = _mapper.Map<List<PaymentDto>>(payments.ToList());
-
-            ViewBag.payments = new SelectList(paymentsDto, "Id", "PaymentDate", payment);
-
-            return View(_mapper.Map<PaymentDto>(payment));
+            var address = await _paymentApiService.GetByIdAsync(id);
+            return View(address);
         }
 
         [HttpPost]
@@ -59,23 +51,16 @@ namespace CarRental.WEB.Controllers
         {
             if (ModelState.IsValid)
             {
-                await _service.UpdateAsync(_mapper.Map<Payment>(paymentDto));
+                await _paymentApiService.UpdateAsync(paymentDto);
                 return RedirectToAction(nameof(Index));
             }
-
-            var payments = await _service.GetAllAsync();
-
-            var paymentsDto = _mapper.Map<List<PaymentDto>>(payments.ToList());
-
-            ViewBag.payments = new SelectList(paymentsDto, "Id", "PaymentDate", paymentDto);
-
             return View(paymentDto);
+
         }
 
         public async Task<IActionResult> Remove(int id)
         {
-            var payment = await _service.GetByIdAsync(id);
-            await _service.RemoveAsync(payment);
+            await _paymentApiService.RemoveAsync(id);
             return RedirectToAction(nameof(Index));
         }
     }

@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using CarRental.Core.DTOs;
 using CarRental.Core.Services;
+using CarRental.Repository.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CarRental.API.Controllers
@@ -27,6 +28,40 @@ namespace CarRental.API.Controllers
 
             return CreateActionResult(CustomResponseDto<List<CreditcardDto>>.Success(200, creditCardsDto));
 
+        }
+
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetById(int id)
+        {
+            var creditCard = await _creditCardService.GetByIdAsync(id);
+            var creditCardsDto = _mapper.Map<CreditcardDto>(creditCard);
+            return CreateActionResult(CustomResponseDto<CreditcardDto>.Success(200, creditCardsDto));
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Save(CreditcardDto creditCardDto)
+        {
+            var creditCard = await _creditCardService.AddAsync(_mapper.Map<Creditcard>(creditCardDto));
+            var creditCardsDto = _mapper.Map<CreditcardDto>(creditCard);
+            return CreateActionResult(CustomResponseDto<CreditcardDto>.Success(201, creditCardsDto));
+        }
+
+        [HttpPut]
+        public async Task<IActionResult> Update(CreditcardDto creditCardDto)
+        {
+            await _creditCardService.UpdateAsync(_mapper.Map<Creditcard>(creditCardDto));
+
+            return CreateActionResult(CustomResponseDto<NoContentDto>.Success(204));
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Remove(int id)
+        {
+            var creditCard = await _creditCardService.GetByIdAsync(id);
+
+            await _creditCardService.RemoveAsync(creditCard);
+
+            return CreateActionResult(CustomResponseDto<NoContentDto>.Success(204));
         }
 
         [HttpGet("[action]/{creditCardId}")]
