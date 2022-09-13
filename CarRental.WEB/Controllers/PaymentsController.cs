@@ -1,26 +1,23 @@
-﻿using AutoMapper;
-using CarRental.Core.DTOs;
-using CarRental.Core.Services;
-using CarRental.Repository.Models;
+﻿using CarRental.Core.DTOs;
 using CarRental.WEB.Services;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace CarRental.WEB.Controllers
 {
     public class PaymentsController : Controller
     {
-        private readonly PaymentApiService _paymentApiService;
+        private readonly ApiService _apiService;
 
-        public PaymentsController(PaymentApiService paymentApiService)
+        public PaymentsController(ApiService apiService)
         {
-            _paymentApiService = paymentApiService;
+            _apiService = apiService;
         }
 
         public async Task<IActionResult> Index()
         {
 
-            return View(await _paymentApiService.GetAllAsync());
+            var payments = await _apiService.GetAllAsync<PaymentDto>("payments");
+            return View(payments);
         }
 
         public IActionResult Save()
@@ -33,7 +30,7 @@ namespace CarRental.WEB.Controllers
         {
             if (ModelState.IsValid)
             {
-                await _paymentApiService.SaveAsync(paymentDto);
+                await _apiService.SaveAsync<PaymentDto>("Payments", paymentDto);
                 return RedirectToAction(nameof(Index));
             }
             return View();
@@ -42,7 +39,7 @@ namespace CarRental.WEB.Controllers
         public async Task<IActionResult> Update(int id)
         {
 
-            var address = await _paymentApiService.GetByIdAsync(id);
+            var address = await _apiService.GetByIdAsync<PaymentDto>($"Payments/{id}");
             return View(address);
         }
 
@@ -51,7 +48,7 @@ namespace CarRental.WEB.Controllers
         {
             if (ModelState.IsValid)
             {
-                await _paymentApiService.UpdateAsync(paymentDto);
+                await _apiService.UpdateAsync<PaymentDto>("Payments", paymentDto);
                 return RedirectToAction(nameof(Index));
             }
             return View(paymentDto);
@@ -60,7 +57,7 @@ namespace CarRental.WEB.Controllers
 
         public async Task<IActionResult> Remove(int id)
         {
-            await _paymentApiService.RemoveAsync(id);
+            await _apiService.RemoveAsync($"Payments/{id}");
             return RedirectToAction(nameof(Index));
         }
     }

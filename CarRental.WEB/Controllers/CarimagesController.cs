@@ -1,33 +1,27 @@
 ﻿using CarRental.Core.DTOs;
 using CarRental.WEB.Services;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace CarRental.WEB.Controllers
 {
     public class CarimagesController : Controller
     {
-        private readonly CarimageApiService _carimageApiService;
-        private readonly CarApiService _carApiService;
+        private readonly ApiService _apiService;
 
-        public CarimagesController(CarimageApiService carimageApiService, CarApiService carApiService)
+        public CarimagesController(ApiService apiService)
         {
-            _carimageApiService = carimageApiService;
-            _carApiService = carApiService;
+            _apiService = apiService;
         }
 
         public async Task<IActionResult> Index()
         {
 
-            return View(await _carimageApiService.GetSingleCarimageByIdWithCarAsync());
+            var carImages = await _apiService.GetAllAsync<CarImageDto>("carimages");
+            return View(carImages);
         }
 
         public async Task<IActionResult> Save()
         {
-            var carsDto = await _carApiService.GetAllAsync();
-
-            ViewBag.cars = new SelectList(carsDto, "Id", "Plaka");
-
             return View();
         }
 
@@ -35,36 +29,19 @@ namespace CarRental.WEB.Controllers
         public async Task<IActionResult> Save(CarImageDto carImageDto)
 
         {
-
-
             if (ModelState.IsValid)
             {
 
-                await _carimageApiService.SaveAsync(carImageDto);
-
-
+                await _apiService.SaveAsync<CarImageDto>("Carimages", carImageDto);
                 return RedirectToAction(nameof(Index));
             }
-
-            var carsDto = await _carApiService.GetAllAsync();
-
-            ViewBag.cars = new SelectList(carsDto, "Id", "Plaka");
             return View();
         }
 
         public async Task<IActionResult> Update(int id)
         {
-            var carimage = await _carimageApiService.GetByIdAsync(id);
-
-
-            var carsDto = await _carApiService.GetAllAsync();
-
-
-
-            ViewBag.cars = new SelectList(carsDto, "Id", "Plaka", carimage.CarId);
-
-            return View(carimage);
-
+            var address = await _apiService.GetByIdAsync<CarImageDto>($"Carimages/{id}");
+            return View(address);
         }
 
         [HttpPost]
@@ -72,26 +49,15 @@ namespace CarRental.WEB.Controllers
         {
             if (ModelState.IsValid)
             {
-
-                await _carimageApiService.UpdateAsync(carImageDto);
-
+                await _apiService.UpdateAsync<CarImageDto>("Carimages", carImageDto);
                 return RedirectToAction(nameof(Index));
-
             }
-
-            var carsDto = await _carApiService.GetAllAsync();
-
-
-
-            ViewBag.cars = new SelectList(carsDto, "Id", "Plaka", carImageDto.CarId);
-
             return View(carImageDto);
-
         }
 
         public async Task<IActionResult> Remove(int id)
         {
-            await _carimageApiService.RemoveAsync(id);
+            await _apiService.RemoveAsync($"Carimages/{id}");
             return RedirectToAction(nameof(Index));
         }
 

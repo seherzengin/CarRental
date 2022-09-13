@@ -6,17 +6,17 @@ namespace CarRental.WEB.Controllers
 {
     public class UsersController : Controller
     {
-        private readonly UserApiService _userApiService;
+        private readonly ApiService _apiService;
 
-        public UsersController(UserApiService userApiService)
+        public UsersController(ApiService apiService)
         {
-            _userApiService = userApiService;
+            _apiService = apiService;
         }
 
         public async Task<IActionResult> Index()
         {
-
-            return View(await _userApiService.GetAllAsync());
+            var users = await _apiService.GetAllAsync<UserDto>("users");
+            return View(users);
         }
 
         public IActionResult Save()
@@ -29,7 +29,7 @@ namespace CarRental.WEB.Controllers
         {
             if (ModelState.IsValid)
             {
-                await _userApiService.SaveAsync(userDto);
+                await _apiService.SaveAsync<UserDto>("Users", userDto);
                 return RedirectToAction(nameof(Index));
             }
             return View();
@@ -37,7 +37,7 @@ namespace CarRental.WEB.Controllers
 
         public async Task<IActionResult> Update(int id)
         {
-            var address = await _userApiService.GetByIdAsync(id);
+            var address = await _apiService.GetByIdAsync<UserDto>($"Users/{id}");
             return View(address);
         }
 
@@ -46,7 +46,7 @@ namespace CarRental.WEB.Controllers
         {
             if (ModelState.IsValid)
             {
-                await _userApiService.UpdateAsync(userDto);
+                await _apiService.UpdateAsync<UserDto>("Users", userDto);
                 return RedirectToAction(nameof(Index));
             }
             return View(userDto);
@@ -55,7 +55,7 @@ namespace CarRental.WEB.Controllers
 
         public async Task<IActionResult> Remove(int id)
         {
-            await _userApiService.RemoveAsync(id);
+            await _apiService.RemoveAsync($"Users/{id}");
             return RedirectToAction(nameof(Index));
         }
     }

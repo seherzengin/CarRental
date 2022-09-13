@@ -1,26 +1,23 @@
-﻿using AutoMapper;
-using CarRental.Core.DTOs;
-using CarRental.Core.Services;
-using CarRental.Repository.Models;
+﻿using CarRental.Core.DTOs;
 using CarRental.WEB.Services;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace CarRental.WEB.Controllers
 {
     public class BrandsController : Controller
     {
-        private readonly BrandApiService _brandApiService;
+        private readonly ApiService _apiService;
 
-        public BrandsController(BrandApiService brandApiService)
+        public BrandsController(ApiService apiService)
         {
-            _brandApiService = brandApiService;
+            _apiService = apiService;
         }
 
         public async Task<IActionResult> Index()
         {
 
-            return View(await _brandApiService.GetAllAsync());
+            var brands = await _apiService.GetAllAsync<BrandDto>("brands");
+            return View(brands); 
         }
 
         public async Task<IActionResult> Save()
@@ -34,7 +31,7 @@ namespace CarRental.WEB.Controllers
         {
             if (ModelState.IsValid)
             {
-                await _brandApiService.SaveAsync(brandDto);
+                await _apiService.SaveAsync<BrandDto>("Brands", brandDto);
                 return RedirectToAction(nameof(Index));
             }
             return View();
@@ -42,8 +39,8 @@ namespace CarRental.WEB.Controllers
 
         public async Task<IActionResult> Update(int id)
         {
-            
-            var address = await _brandApiService.GetByIdAsync(id);
+
+            var address = await _apiService.GetByIdAsync<BrandDto>($"brands/{id}");
             return View(address);
         }
 
@@ -52,7 +49,7 @@ namespace CarRental.WEB.Controllers
         {
             if (ModelState.IsValid)
             {
-                await _brandApiService.UpdateAsync(brandDto);
+                await _apiService.UpdateAsync<BrandDto>("Brands", brandDto);
                 return RedirectToAction(nameof(Index));
             }
             return View(brandDto);
@@ -60,7 +57,7 @@ namespace CarRental.WEB.Controllers
 
         public async Task<IActionResult> Remove(int id)
         {
-            await _brandApiService.RemoveAsync(id);
+            await _apiService.RemoveAsync($"Brands/{id}");
             return RedirectToAction(nameof(Index));
         }
 

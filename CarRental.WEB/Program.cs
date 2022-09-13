@@ -22,74 +22,9 @@ builder.Services.AddDbContext<carrentaldbContext>(options =>
 });
 
 
-builder.Services.AddHttpClient<BrandApiService>(opt =>
+builder.Services.AddHttpClient<ApiService>(option =>
 {
-
-    opt.BaseAddress = new Uri(builder.Configuration["BaseUrl"]);
-
-});
-
-builder.Services.AddHttpClient<ColorApiService>(opt =>
-{
-
-    opt.BaseAddress = new Uri(builder.Configuration["BaseUrl"]);
-
-});
-
-builder.Services.AddHttpClient<CarimageApiService>(opt =>
-{
-
-    opt.BaseAddress = new Uri(builder.Configuration["BaseUrl"]);
-
-});
-
-builder.Services.AddHttpClient<CarApiService>(opt =>
-{
-
-    opt.BaseAddress = new Uri(builder.Configuration["BaseUrl"]);
-
-});
-
-builder.Services.AddHttpClient<UserApiService>(opt =>
-{
-
-    opt.BaseAddress = new Uri(builder.Configuration["BaseUrl"]);
-
-});
-
-builder.Services.AddHttpClient<CustomerApiService>(opt =>
-{
-
-    opt.BaseAddress = new Uri(builder.Configuration["BaseUrl"]);
-
-});
-
-builder.Services.AddHttpClient<RentalApiService>(opt =>
-{
-
-    opt.BaseAddress = new Uri(builder.Configuration["BaseUrl"]);
-
-});
-
-builder.Services.AddHttpClient<PaymentApiService>(opt =>
-{
-
-    opt.BaseAddress = new Uri(builder.Configuration["BaseUrl"]);
-
-});
-
-builder.Services.AddHttpClient<CreditcardApiService>(opt =>
-{
-
-    opt.BaseAddress = new Uri(builder.Configuration["BaseUrl"]);
-
-});
-
-builder.Services.AddHttpClient<FindekApiService>(opt =>
-{
-
-    opt.BaseAddress = new Uri(builder.Configuration["BaseUrl"]);
-
+    option.BaseAddress = new Uri(builder.Configuration["BaseUrl"]);
 });
 
 

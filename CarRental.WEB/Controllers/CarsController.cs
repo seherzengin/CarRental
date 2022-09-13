@@ -7,17 +7,18 @@ namespace CarRental.WEB.Controllers
     public class CarsController : Controller
     {
 
-        private readonly CarApiService _carApiService;
+        private readonly ApiService _apiService;
 
-        public CarsController(CarApiService carApiService)
+        public CarsController(ApiService apiService)
         {
-            _carApiService = carApiService;
+            _apiService = apiService;
         }
 
         public async Task<IActionResult> Index()
         {
 
-            return View(await _carApiService.GetAllAsync());
+            var cars = await _apiService.GetAllAsync<CarDto>("cars");
+            return View(cars);
         }
 
         public async Task<IActionResult> Save()
@@ -31,7 +32,7 @@ namespace CarRental.WEB.Controllers
         {
             if (ModelState.IsValid)
             {
-                await _carApiService.SaveAsync(carDto);
+                await _apiService.SaveAsync<CarDto>("Cars", carDto);
                 return RedirectToAction(nameof(Index));
             }
             return View();
@@ -40,7 +41,7 @@ namespace CarRental.WEB.Controllers
         public async Task<IActionResult> Update(int id)
         {
             
-            var address = await _carApiService.GetByIdAsync(id);
+            var address = await _apiService.GetByIdAsync<CarDto>($"Cars/{id}");
             return View(address);
         }
 
@@ -49,7 +50,7 @@ namespace CarRental.WEB.Controllers
         {
             if (ModelState.IsValid)
             {
-                await _carApiService.UpdateAsync(carDto);
+                await _apiService.UpdateAsync<CarDto>("Cars", carDto);
                 return RedirectToAction(nameof(Index));
             }
             return View(carDto);
@@ -58,7 +59,7 @@ namespace CarRental.WEB.Controllers
 
         public async Task<IActionResult> Remove(int id)
         {
-            await _carApiService.RemoveAsync(id);
+            await _apiService.RemoveAsync($"Cars/{id}");
             return RedirectToAction(nameof(Index));
         }
 

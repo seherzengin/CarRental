@@ -6,17 +6,18 @@ namespace CarRental.WEB.Controllers
 {
     public class RentalsController : Controller
     {
-        private readonly RentalApiService _rentalApiService;
+        private readonly ApiService _apiService;
 
-        public RentalsController(RentalApiService rentalApiService)
+        public RentalsController(ApiService apiService)
         {
-            _rentalApiService = rentalApiService;
+            _apiService = apiService;
         }
 
         public async Task<IActionResult> Index()
         {
 
-            return View(await _rentalApiService.GetAllAsync());
+            var rentals = await _apiService.GetAllAsync<RentalDto>("rentals");
+            return View(rentals);
         }
 
         public async Task<IActionResult> Save()
@@ -30,7 +31,7 @@ namespace CarRental.WEB.Controllers
         {
             if (ModelState.IsValid)
             {
-                await _rentalApiService.SaveAsync(rentalDto);
+                await _apiService.SaveAsync<RentalDto>("Rentals", rentalDto);
                 return RedirectToAction(nameof(Index));
             }
             return View();
@@ -39,7 +40,7 @@ namespace CarRental.WEB.Controllers
         public async Task<IActionResult> Update(int id)
         {
 
-            var address = await _rentalApiService.GetByIdAsync(id);
+            var address = await _apiService.GetByIdAsync<RentalDto>($"Rentals/{id}");
             return View(address);
         }
 
@@ -48,7 +49,7 @@ namespace CarRental.WEB.Controllers
         {
             if (ModelState.IsValid)
             {
-                await _rentalApiService.UpdateAsync(rentalDto);
+                await _apiService.UpdateAsync<RentalDto>("Rentals", rentalDto);
                 return RedirectToAction(nameof(Index));
             }
             return View(rentalDto);
@@ -57,7 +58,7 @@ namespace CarRental.WEB.Controllers
 
         public async Task<IActionResult> Remove(int id)
         {
-            await _rentalApiService.RemoveAsync(id);
+            await _apiService.RemoveAsync($"Rentals/{id}");
             return RedirectToAction(nameof(Index));
         }
     }
