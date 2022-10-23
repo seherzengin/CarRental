@@ -4,7 +4,7 @@ namespace CarRental.WEB.Services
 {
     public class ApiService : IApiService
     {
-        private readonly HttpClient _httpClient;
+        public readonly HttpClient _httpClient;
 
         public ApiService(HttpClient httpClient)
         {
