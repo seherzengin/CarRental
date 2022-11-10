@@ -8,3 +8,5 @@
 #### :pushpin: Entity Framework 
 #### :pushpin: InMemoryCache
 #### :pushpin: N-Layer Architechure
+#### :pushpin: Fluent Validation
+#### :pushpin: Autofac
